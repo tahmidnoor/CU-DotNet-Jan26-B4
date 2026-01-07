@@ -1,0 +1,14 @@
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\bin\Debug\net8.0\ExamResult.exe
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\bin\Debug\net8.0\ExamResult.deps.json
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\bin\Debug\net8.0\ExamResult.runtimeconfig.json
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\bin\Debug\net8.0\ExamResult.dll
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\bin\Debug\net8.0\ExamResult.pdb
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ExamResult.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ExamResult.AssemblyInfoInputs.cache
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ExamResult.AssemblyInfo.cs
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ExamResult.csproj.CoreCompileInputs.cache
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ExamResult.dll
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\refint\ExamResult.dll
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ExamResult.pdb
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ExamResult.genruntimeconfig.cache
+C:\Users\tahmi\source\repos\ExamResult\ExamResult\obj\Debug\net8.0\ref\ExamResult.dll
