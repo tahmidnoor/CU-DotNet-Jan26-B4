@@ -1,7 +1,7 @@
 Day 2 - Exercise
 ----------------
 
-Exercise 1.
+//Exercise 1.
 
 namespace StuAttend
 {
@@ -28,7 +28,7 @@ namespace StuAttend
 Explicit casting ((double)TDays) is used to avoid integer division, followed by explicit conversion (Convert.ToInt32) to safely convert the calculated percentage from double to int.
 
 
-Exercise 2.
+//Exercise 2.
 
 namespace ExamResult
 {
@@ -60,7 +60,7 @@ namespace ExamResult
 Implicit conversion occurs during average calculation using double, and explicit casting ((int)res) is used to truncate the result for eligibility comparison.
 
 
-Exercise 3.
+//Exercise 3.
 
 namespace FineLib
 {
@@ -81,7 +81,7 @@ namespace FineLib
 Explicit casting converts decimal and int to double for multiplication, and Convert.ToDecimal safely converts the result back to decimal for monetary accuracy.
 
 
-Exercise 4.
+//Exercise 4.
 
 namespace IntCal
 {
@@ -103,7 +103,7 @@ namespace IntCal
 Implicit conversion from float to decimal is avoided by explicit casting to maintain precision during interest calculation.
 
 
-Exercise 5.
+//Exercise 5.
 
 namespace EcomPrice
 {
@@ -128,7 +128,7 @@ namespace EcomPrice
 Explicit casting from double to decimal is used to ensure accurate financial calculations while applying discount and tax.
 
 
-Exercise 6.
+//Exercise 6.
 
 namespace TempDash
 {
@@ -159,7 +159,7 @@ namespace TempDash
 Implicit widening conversion converts short sensor values to double for averaging, and explicit casting converts the average to int for dashboard display.
 
 
-Exercise 7.
+//Exercise 7.
 
 namespace GradeCal
 {
@@ -190,7 +190,7 @@ namespace GradeCal
 No direct casting is used; instead, the double score is safely converted to a byte grade through controlled logical mapping.
 
 
-Exercise 8.
+//Exercise 8.
 
 
 namespace DataTrack
@@ -214,7 +214,7 @@ namespace DataTrack
 Implicit conversion promotes long to double for unit conversion, and Math.Round with explicit casting converts the value to int for reporting.
 
 
-Exercise 9.
+//Exercise 9.
 
 namespace InCap
 {
@@ -244,7 +244,7 @@ namespace InCap
 Implicit type promotion converts ushort to int during comparison, avoiding unsafe signed-to-unsigned casting.
 
 
-Exercise 10.
+//Exercise 10.
 
 namespace PaySys
 {
@@ -268,3 +268,4 @@ namespace PaySys
 }
 
 Implicit conversion allows int to double for percentage calculations, while explicit casting converts values to decimal for precise salary computation.
+
