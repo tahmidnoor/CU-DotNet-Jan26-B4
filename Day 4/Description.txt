@@ -1,1 +1,0 @@
-A basic web application using ASP.NET Core MVC for a college training program.
