@@ -6,7 +6,7 @@
 
 
 
-![Logo](1.png)
-![Logo](2.png)
-![Logo](3.png)
+![Logo](/Screenshots/1.png)
+![Logo](/Screenshots/2.png)
+![Logo](/Screenshots/3.png)
 
