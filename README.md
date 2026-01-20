@@ -1,4 +1,4 @@
-\# 22BCS15366 - Tahmid Noor
+\# 22BCS15366-Tahmid Noor
 
 \[Chandigarh University]
 
