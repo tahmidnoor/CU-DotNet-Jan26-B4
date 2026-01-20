@@ -1,2 +1,4 @@
-\# 22BCS15366 - Tahmid Noor Chandigarh University Capgemini Training - January 2026
+\# 22BCS15366 - Tahmid Noor \[Chandigarh University]
+
+CAPGEMINI TRAINING - JANUARY 2026
 
