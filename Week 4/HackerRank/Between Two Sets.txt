@@ -1,0 +1,35 @@
+class Result
+{
+
+    public static int gcd(int a, int b){
+        return b == 0 ? a : gcd(b, a % b);
+    }
+    
+    public static int lgcd(List<int> num){
+        return num.Aggregate(gcd);
+    }
+    
+    public static int lcm(int a, int b)
+    {
+        return a / gcd(a, b) * b;
+    }
+
+    public static int llcm(List<int> num)
+    {
+        return num.Aggregate(lcm);
+    }
+    
+    public static int getTotalX(List<int> a, List<int> b)
+    {
+        int res = 0;
+        int lcm = llcm(a);
+        int gcd = lgcd(b);
+        
+        for(int i = lcm; i<=gcd; i+=lcm){
+            if(gcd%i==0){
+                res++;
+            }
+        }
+        return res;
+    }
+}

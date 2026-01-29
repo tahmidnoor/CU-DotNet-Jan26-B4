@@ -1,0 +1,271 @@
+Day 2 - Exercise
+----------------
+
+//Exercise 1.
+
+namespace StuAttend
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int PDays = 130;
+            int TDays = 196;
+            double percentage = (PDays / (double)TDays) * 100;
+            Console.WriteLine("The Attendance of the Candidate is "+ Convert.ToInt32(percentage) + ".");
+            if(percentage >= 75)
+            {
+                Console.WriteLine("The Student is Eligible!");
+            }
+            else
+            {
+                Console.WriteLine("The Student is Ineligible");
+            }
+        }
+    }
+}
+
+Explicit casting ((double)TDays) is used to avoid integer division, followed by explicit conversion (Convert.ToInt32) to safely convert the calculated percentage from double to int.
+
+
+//Exercise 2.
+
+namespace ExamResult
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            int math = 91;
+            int os = 92;
+            int dsa = 92;
+            int eng = 89;
+            int cn = 95;
+            double res = (math + os + dsa + eng + cn) / 5.00;
+            Console.WriteLine($"Your Result: {res:F2}");
+
+            if((int)res > 80)
+            {
+                Console.WriteLine("Your are Eligible for the Scholarship!");
+            }
+            else
+            {
+                Console.WriteLine("Your are not Eligible for the Scholarship!");
+            }
+        }
+    }
+}
+
+Implicit conversion occurs during average calculation using double, and explicit casting ((int)res) is used to truncate the result for eligibility comparison.
+
+
+//Exercise 3.
+
+namespace FineLib
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            decimal fine = 1.6m;
+            int Tdays = 29;
+            double Tfine = (double)fine * (double)Tdays;
+            Console.WriteLine("Your Total Fine is " + Convert.ToDecimal(Tfine) + ".");
+
+        }
+    }
+}
+
+Explicit casting converts decimal and int to double for multiplication, and Convert.ToDecimal safely converts the result back to decimal for monetary accuracy.
+
+
+//Exercise 4.
+
+namespace IntCal
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            decimal AccBal = 75000.5M;
+            Console.WriteLine("Accout Balance: " + AccBal);
+            float RoI = 6.25f;
+            decimal monInt = AccBal * (decimal) RoI / 100 / 12;
+            AccBal += monInt;
+            Console.WriteLine($"Updated Accout Balance: {AccBal:F3}");
+        }
+    }
+}
+
+Implicit conversion from float to decimal is avoided by explicit casting to maintain precision during interest calculation.
+
+
+//Exercise 5.
+
+namespace EcomPrice
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            double Tcart = 750.5;
+            decimal PTax = 0.1m;
+            decimal PDis = 0.15m;
+            decimal DisAmm = (decimal)Tcart - ((decimal)Tcart * PDis);
+            decimal FAmm = DisAmm + (DisAmm * PTax);
+
+            Console.WriteLine("Final Cart Price: " + Tcart);
+            Console.WriteLine($"Price after Discount: {DisAmm:F2}");
+            Console.WriteLine($"Total Price: {FAmm:F2}");
+        }
+    }
+}
+
+Explicit casting from double to decimal is used to ensure accurate financial calculations while applying discount and tax.
+
+
+//Exercise 6.
+
+namespace TempDash
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+
+            short D1 = 59;
+            short D2 = 61;
+            short D3 = 60;
+
+            double T1 = D1;
+            double T2 = D2;
+            double T3 = D3;
+
+            double avgTemp = (T1 + T2 + T3) / 3.0;
+
+            int dashboardTemp = (int)avgTemp;
+
+            Console.WriteLine("Average Temperature: " + avgTemp);
+            Console.WriteLine("Dashboard Temperature: " + dashboardTemp);
+        }
+    }
+}
+
+Implicit widening conversion converts short sensor values to double for averaging, and explicit casting converts the average to int for dashboard display.
+
+
+//Exercise 7.
+
+namespace GradeCal
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            double finalScore = 87.6;
+            byte grade = CalculateGrade(finalScore);
+            Console.WriteLine("Final Score: " + finalScore);
+            Console.WriteLine("Grade: " + grade);
+        }
+        static byte CalculateGrade(double score)
+        {
+            if (score >= 90) return 10;
+            if (score >= 80) return 9;
+            if (score >= 70) return 8;
+            if (score >= 60) return 7;
+            if (score >= 50) return 6;
+            if (score >= 40) return 5;
+
+            return 0;
+        }
+    }
+}
+
+No direct casting is used; instead, the double score is safely converted to a byte grade through controlled logical mapping.
+
+
+//Exercise 8.
+
+
+namespace DataTrack
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            long uB = 5254698624;
+            double uMB = uB / (1024.0 * 1024.0);
+            double uGB = uB / (1024.0 * 1024.0 * 1024.0);
+            int mGB = (int)Math.Round(uGB);
+            Console.WriteLine($"Usage in MB: {uMB:F2}");
+            Console.WriteLine($"Usage in GB: {uGB:F2}");
+            Console.WriteLine("Monthly Summary: " + mGB);
+        }
+    }
+}
+
+Implicit conversion promotes long to double for unit conversion, and Math.Round with explicit casting converts the value to int for reporting.
+
+
+//Exercise 9.
+
+namespace InCap
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            int itemCount = 48000;
+            ushort maxCapacity = 50000;
+            bool isOverCapacity = itemCount > maxCapacity;
+
+            Console.WriteLine("Items in Warehouse: " + itemCount);
+            Console.WriteLine("Maximum Capacity: " + maxCapacity);
+            if (isOverCapacity == false)
+            {
+                Console.WriteLine("Over Capacity: NO");
+            }
+            else
+            {
+                Console.WriteLine("Over Capacity: YES");
+            }
+        }
+    }
+}
+
+Implicit type promotion converts ushort to int during comparison, avoiding unsafe signed-to-unsigned casting.
+
+
+//Exercise 10.
+
+namespace PaySys
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello Tahmid!");
+            int baseSal = 55000;
+            double hra = 0.20 * baseSal;
+            double tax = 0.10 * baseSal;
+
+            decimal netSalary = (decimal)baseSal + (decimal)hra - (decimal)tax;
+
+            Console.WriteLine("Basic Salary: " + baseSal);
+            Console.WriteLine("HRA: " + hra);
+            Console.WriteLine("Tax: " + tax);
+            Console.WriteLine("Net Salary: " + netSalary);
+        }
+    }
+}
+
+Implicit conversion allows int to double for percentage calculations, while explicit casting converts values to decimal for precise salary computation.
+
