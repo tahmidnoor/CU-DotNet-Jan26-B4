@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parivahan Seva</title>
+</head>
+<body>
+    <h2>Parivahan Seva Portal</h2>
+    <hr/>
+    <table>
+        <tr>
+            <td>
+                <label>Name: </label>
+            </td>
+            <td>
+                <input type="text" pattern="^[A-Z]{1}[a-z]{1,}$" name="ename" id="ename" required/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>DOB: </label>
+            </td>
+            <td>
+                <input type="date" name="dob" id="dob" max="2008-03-03" required />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Gender: </label>
+            </td>
+            <td>
+                <input type="radio" name="gender" value="male" class="gender">
+                <label for="male">Male</label>
+                <input type="radio" name="gender" value="female" class="gender">
+                <label for="female">Female</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Blood Group: </label>
+            </td>
+            <td>
+                <select name="bloodGroup" required>
+                    <option value="">Select</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Do you have Aadhaar?</label>
+            </td>
+            <td>
+                <input type="radio" name="aadhaar?" id="yes" value="Y" required />
+                <label for="male">Yes</label>
+                <input type="radio" name="aadhaar?" id="no" value="N" required />
+                <label for="female">No</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Aadhaar Number: </label>
+            </td>
+            <td>
+                <input type="text" pattern="[0-9]{12}" placeholder="12-digit Aadhaar"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Address: </label>
+            </td>
+            <td>
+                <textarea name="address" row="4" cols="30" placeholder="Enter Full Address" required></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Phone: </label>
+            </td>
+            <td>
+                <input type="tel" pattern="[0-9]{10}" placeholder="10-digit Number" required />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>License Type: </label>
+            </td>
+            <td>
+                <select name="licenseType" required>
+                    <option value="">Select Type</option>
+                    <option value="LMV">LMV (Light Motor Vehicle)</option>
+                    <option value="MCWG">MCWG (Motorcycle with Gear)</option>
+                    <option value="MCWOG">MCWOG (Motorcycle without Gear)</option>
+                    <option value="HMV">HMV (Heavy Motor Vehicle)</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input id="checkbox" type="checkbox" name="terms" value="accepted" required />
+        <label for="checkbox"> 
+            I agree to the <a href="terms-and-conditions.html" target="_blank">Terms and Conditions</a>.
+        </label>
+    </div>
+    <p></p>
+    <button type="submit">Submit</button>
+</body>
+</html>
