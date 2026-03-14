@@ -1,0 +1,25 @@
+﻿@model FinTrackPro.Models.Asset
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Asset Details</h2>
+
+    <div class="card" style="width: 20rem;">
+
+        <div class="card-body">
+
+            <h5 class="card-title">@Model.Name</h5>
+
+            <p class="card-text">
+                <strong>Value:</strong> @Model.Value
+            </p>
+
+            <a asp-action="Index" class="btn btn-primary">
+                Back
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

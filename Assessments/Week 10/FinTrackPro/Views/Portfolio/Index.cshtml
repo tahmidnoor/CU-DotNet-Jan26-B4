@@ -1,0 +1,78 @@
+﻿@model List<FinTrackPro.Models.Asset>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Portfolio Assets</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div id="deleteToast" class="toast show position-fixed bottom-0 end-0 m-3">
+            <div class="toast-header bg-danger text-white">
+                <strong class="me-auto">Notification</strong>
+            </div>
+            <div class="toast-body">
+                @TempData["Message"]
+            </div>
+        </div>
+
+        <script>
+            setTimeout(function(){
+                var toast = document.getElementById("deleteToast");
+                if(toast){
+                    toast.style.display = "none";
+                }
+            },3000);
+        </script>
+    }
+
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var a in Model)
+            {
+                <tr>
+
+                    <td>@a.Id</td>
+                    <td>@a.Name</td>
+                    <td>@a.Value</td>
+
+                    <td>
+
+                        <a href="/Asset/Info/@a.Id" class="btn btn-info btn-sm">
+                            Details
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@a.Id"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+    @{
+        double total = (double)ViewData["Total"];
+        double result = total + 500;
+    }
+
+    <h5>Total Portfolio Value: @total</h5>
+    <h6>Total + 500 = @result</h6>
+
+</div>

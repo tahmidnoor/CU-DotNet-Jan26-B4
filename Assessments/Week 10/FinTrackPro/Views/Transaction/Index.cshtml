@@ -1,0 +1,93 @@
+﻿@model List<FinTrackPro.Models.Transaction>
+
+<div class="container mt-4">
+
+    <h2 class="mb-3">Transactions</h2>
+
+    <a asp-action="Create" class="btn btn-primary mb-3">Add Transaction</a>
+
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Account Holder</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var t in Model)
+            {
+                <tr>
+
+                    <td>@t.Description</td>
+                    <td>@t.Amount</td>
+                    <td>@t.Category</td>
+                    <td>@t.Date.ToShortDateString()</td>
+                    <td>@t.Account?.AccountName</td>
+
+                    <td>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@t.Id"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+    @if (TempData["Success"] != null)
+    {
+        <div id="toastSuccess" class="toast show position-fixed bottom-0 end-0 m-3">
+
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">Success</strong>
+            </div>
+
+            <div class="toast-body">
+                @TempData["Success"]
+            </div>
+
+        </div>
+
+        <script>
+            setTimeout(function(){
+                document.getElementById("toastSuccess").style.display="none";
+            },3000);
+        </script>
+    }
+
+    @if (TempData["Message"] != null)
+    {
+        <div id="toastDelete" class="toast show position-fixed bottom-0 end-0 m-3">
+
+            <div class="toast-header bg-danger text-white">
+                <strong class="me-auto">Notification</strong>
+            </div>
+
+            <div class="toast-body">
+                @TempData["Message"]
+            </div>
+
+        </div>
+
+        <script>
+            setTimeout(function(){
+                document.getElementById("toastDelete").style.display="none";
+            },3000);
+        </script>
+    }
+
+</div>

@@ -1,0 +1,49 @@
+﻿@model FinTrackPro.Models.Transaction
+
+<div class="container mt-4">
+
+    <h2>Add Transaction</h2>
+
+    <form asp-action="Create" method="post">
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <input asp-for="Description" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Amount" class="form-label"></label>
+            <input asp-for="Amount" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Category" class="form-label"></label>
+            <input asp-for="Category" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Date" class="form-label"></label>
+            <input asp-for="Date" type="date" class="form-control">
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="AccountID" class="form-label">Account</label>
+
+            <select asp-for="AccountID"
+                    asp-items="ViewBag.AccountList"
+                    class="form-control">
+
+                <option value="">Select Account</option>
+
+            </select>
+
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Save
+        </button>
+
+    </form>
+
+</div>
