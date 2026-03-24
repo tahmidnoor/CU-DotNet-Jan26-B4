@@ -1,0 +1,86 @@
+﻿@model IEnumerable<GlobalMart.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+    decimal subtotal = (ViewBag.Subtotal ?? 0.00m);
+    decimal discounted = (ViewBag.DiscountedTotal ?? 0.00m);
+    string promoCode = (ViewBag.PromoCode ?? string.Empty);
+}
+
+<h2>Products</h2>
+
+<form id="cartForm" method="post" asp-action="Index" asp-controller="Products">
+
+    <table style="border-collapse: separate; border-spacing: 24px 8px;">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Product</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" name="productIds" class="product-checkbox" value="@p.Id" data-price="@p.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" @( (Context.Request.HasFormContentType && Context.Request.Form["productIds"].Contains(p.Id.ToString())) ? "checked" : "" ) />
+                    </td>
+                    <td>@p.Name</td>
+                    <td>₹ @p.Price</td>
+                </tr>   
+            }
+        </tbody>
+    </table>
+
+    <div style="margin-top:10px;">
+        <label>Subtotal: ₹ <span id="subtotalDisplay">@subtotal.ToString("0.00")</span></label>
+    </div>
+
+    <div style="margin-top:5px;">
+        <label for="promoCode">Promo Code:</label>
+        <input type="text" id="promoCode" name="promoCode" value="@promoCode" />
+        <button type="submit" id="applyPromo">Apply</button>
+    </div>
+
+    <div style="margin-top:5px;">
+        <label>Discounted Total: ₹ <span id="discountedTotalDisplay">@discounted.ToString("0.00")</span></label>
+    </div>
+
+    <input type="hidden" id="subtotal" name="subtotal" value="@subtotal.ToString("0.00")" />
+
+    <div style="margin-top:10px;">
+        <button type="submit" formaction="/Cart/Checkout" formmethod="post">Checkout</button>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+    (function () {
+        function parsePrice(v) {
+            var n = parseFloat(v);
+            return isNaN(n) ? 0 : n;
+        }
+
+        function recalcSubtotal() {
+            var checkboxes = document.querySelectorAll('.product-checkbox');
+            var subtotal = 0;
+            checkboxes.forEach(function (cb) {
+                if (cb.checked) {
+                    subtotal += parsePrice(cb.getAttribute('data-price'));
+                }
+            });
+
+            subtotal = Math.round(subtotal * 100) / 100;
+            document.getElementById('subtotal').value = subtotal.toFixed(2);
+            document.getElementById('subtotalDisplay').textContent = subtotal.toFixed(2);
+        }
+
+        document.querySelectorAll('.product-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', recalcSubtotal);
+        });
+
+        recalcSubtotal();
+    })();
+</script>
+}

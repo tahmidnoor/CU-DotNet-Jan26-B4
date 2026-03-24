@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2>Cart Checkout</h2>
+
+<p>Subtotal: ₹ @((ViewBag.Subtotal ?? 0.00m).ToString("0.00"))</p>
+<p>Promo Code: @(!string.IsNullOrEmpty((string)ViewBag.PromoCode) ? (string)ViewBag.PromoCode : "—")</p>
+<p><strong>Final Total: ₹ @((ViewBag.FinalTotal ?? 0.00m).ToString("0.00"))</strong></p>
+
+<div style="margin-top:10px;">
+    <a href="/Products/Index">Back to Products</a>
+</div>
