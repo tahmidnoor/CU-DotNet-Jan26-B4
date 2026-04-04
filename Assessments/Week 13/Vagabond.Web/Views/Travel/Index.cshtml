@@ -1,0 +1,115 @@
+﻿@model List<Vagabond.Web.Models.Destination>
+
+@{
+    ViewData["Title"] = "Travel Destinations";
+}
+
+<style>
+    /* Background only for this page */
+    .index-page {
+        position: relative;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+        .index-page::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/images/travel-bg.jpeg') no-repeat center center/cover;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+    /* Card hover effect */
+    .hover-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+    /* Description animation */
+    .description {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        font-size: 14px;
+        color: #555;
+        font-style: italic;
+        margin-top: 8px;
+    }
+
+    .hover-card:hover .description {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<div class="index-page">
+
+    <!-- Heading -->
+    <h2 class="mt-5 text-center" style="margin-bottom: 50px;">
+        🌍 Explore the World!
+    </h2>
+
+    <!-- Cards -->
+    <div class="row">
+        @if (Model != null && Model.Count > 0)
+        {
+            foreach (var d in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100 hover-card bg-white bg-opacity-75">
+                        <div class="card-body">
+
+                            <!-- City + Country -->
+                            <h5 class="card-title fw-bold">
+                                @d.CityName, @d.Country
+                            </h5>
+
+                            <!-- Rating -->
+                            <p class="card-text text-warning mb-2">
+                                @{
+                                    for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= d.Rating)
+                                        {
+                                            <text>⭐</text>
+                                        }
+                                        else
+                                        {
+                                            <text>☆</text>
+                                        }
+                                    }
+                                }
+                            </p>
+
+                            <!-- Last Visited -->
+                            <p class="card-text text-muted">
+                                Last Visited: @d.LastVisited.ToString("dd MMMM yyyy")
+                            </p>
+
+                            <!-- Description -->
+                            <div class="description">
+                                @d.Description
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No destinations available</p>
+        }
+    </div>
+
+</div>
