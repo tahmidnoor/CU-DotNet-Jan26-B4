@@ -1,0 +1,36 @@
+﻿@model Laptop
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="mb-4 text-center">Add New Laptop</h2>
+
+        <form asp-action="Create" asp-controller="Laptop" method="post">
+
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Model Name</label>
+                <input asp-for="ModelName" class="form-control" placeholder="Enter model name" />
+                <span asp-validation-for="ModelName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Serial Number</label>
+                <input asp-for="SerialNumber" class="form-control" placeholder="Enter serial number" />
+                <span asp-validation-for="SerialNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Price</label>
+                <input asp-for="Price" class="form-control" placeholder="Enter price" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">💾 Save Laptop</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

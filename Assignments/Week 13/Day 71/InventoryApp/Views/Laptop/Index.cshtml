@@ -1,0 +1,44 @@
+﻿@model List<Laptop>
+
+<div class="container mt-5">
+
+    <h2 class="mb-4 text-center">💻 Laptop Inventory</h2>
+
+    <!-- SUCCESS ALERT -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @if (TempData.ContainsKey("SuccessMessage"))
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="mb-3 text-end">
+        <a href="/Laptop/Create" class="btn btn-success">➕ Add New Laptop</a>
+    </div>
+
+    <table class="table table-bordered table-striped shadow">
+        <thead class="table-dark">
+            <tr>
+                <th>Model</th>
+                <th>Serial</th>
+                <th>Price (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ModelName</td>
+                    <td>@item.SerialNumber</td>
+                    <td>@item.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
