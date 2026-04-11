@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Driving License Application</h1>
+    <h3>Enter your Details</h3>
+    <form onsubmit="return showData()">
+        <table>
+            <tr>
+                <td>
+                    <label>Enter your first name</label>
+                </td>
+                <td>
+                    <input type="text" pattern="^[A-Z]{1}[a-z]{1,}" name="DLName" id="DLName" required placeholder="Name">
+                </td>
+            </tr>
+            <tr>
+                <td>Email:
+                    
+                </td>
+                <td>
+                <input type="email" name="email" required placeholder="Mail">
+                </td>
+            </tr>
+            <tr>
+                <td>Mobile Number:
+
+                </td>
+            <td>
+                <input type="tel" name="mobile" pattern="[0-9]{10}"placeholder="10 digit number" required>
+            </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Specify your gender</label>
+                </td>
+                <td>
+                    <input type="radio" name = "gender" id ="male" value="M" required/> 
+                    <label for="male">Male</label>
+                    <input type="radio" name = "gender" id ="female" value="F" required/> 
+                    <label for="male">Female</label>
+                    <input type="radio" name="gender" value="Other" required> Other
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Select DOB</label>
+                </td>
+                <td>
+                    <input type = "date" name="dob" id="dob" min="2000-01-01" max="2008-12-31" required />
+                </td>
+            </tr>
+
+             <tr>
+                <td>
+                    <label>Enter Age</label>
+                </td>
+                <td>
+                    <input type="number" name="age" id="age" min="18" max="80" required placeholder="Age"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Select Blood Group</label>
+                </td>
+                <td>
+                    <select id="BG" name="Bg" required>
+                        <option value="">Select</option>
+                        <option value="1">A+</option>
+                        <option value="2">A-</option>
+                        <option value="3">B+</option>
+                        <option value="4">B-</option>
+                        <option value="5">O+</option>
+                        <option value="6">O-</option>
+                        <option value="7">AB-</option>
+                        <option value="8">AB+</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Address:
+
+                </td>
+                <td>
+                    <textarea name="address" rows="4" cols="30" placeholder="Enter full address" required></textarea>
+                </td>
+            </tr>
+            <tr>
+            <td>Upload Photo:
+
+            </td>
+            <td>
+                <input type="file" name="photo" accept="image/*" required>
+            </td>
+            </tr>
+
+            <tr>
+            <td>Vehicle Type:</td>
+            <td>
+                <input type="checkbox" name="vehicle" value="Two Wheeler"> Two Wheeler
+                <input type="checkbox" name="vehicle" value="Four Wheeler"> Four Wheeler
+                <input type="checkbox" name="vehicle" value="Commercial"> Commercial
+            </td>
+        </tr>
+        <tr>
+            <td>Agree to Terms:</td>
+            <td>
+                <input type="checkbox" name="terms" required> I Agree
+            </td>
+        </tr>
+        <br>
+        <tr>
+            <td>
+                <br><br>
+                <input type="reset" value="Reset">
+    
+            </td>
+            <td>
+                <br><br>
+                <input type="submit" value="Submit">
+            </td>
+        </tr>
+        </table>
+    </form>
+    <script>
+        function showData(){
+            let name = document.getElementById("DLName").value;
+            let email = document.querySelector("input[name='email']").value;
+            let mobile = document.querySelector("input[name='mobile']").value;
+            let gender = document.querySelector("input[name='gender']:checked").value;
+            let dob = document.getElementById("dob").value;
+            let age = document.getElementById("age").value;
+            let bg = document.getElementById("BG").options[document.getElementById("BG").selectedIndex].text;
+            let address = document.querySelector("textarea[name='address']").value;
+            let vehicles = "";
+            let v= document.querySelectorAll("input[name='vehicle']:checked");
+            v.forEach(x=> vehicles+= x.value +" ");
+            let result = "Name: "+name+"\nEmail: "+email+"\nMobile: "+mobile+"\nGender: "+gender+"\nDOB: "+ dob + "\nAge: "+age+ "\nBlood Group: "+ bg + "\nAddress:"+address+"\nVechile Type: "+vehicles;
+            alert(result);
+            return false;
+
+
+        }
+    </script>
+
+
+
+
+
+
+</body>
+</html>

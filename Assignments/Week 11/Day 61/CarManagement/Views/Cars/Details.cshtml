@@ -1,0 +1,12 @@
+﻿@model CarManagement.Models.Car
+
+<h2 class="text-center mb-4">🚘 Car Details</h2>
+
+<div class="card shadow p-4">
+    <p><strong>Brand:</strong> @Model.Brand</p>
+    <p><strong>Model:</strong> @Model.Model</p>
+    <p><strong>Year:</strong> @Model.Year</p>
+    <p><strong>Price:</strong> ₹@Model.Price</p>
+
+    <a asp-action="Index" class="btn btn-primary">Back</a>
+</div>

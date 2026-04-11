@@ -1,0 +1,32 @@
+﻿@model CarManagement.Models.Car
+
+<h2 class="text-center mb-4">✏️ Edit Car</h2>
+
+<div class="card shadow p-4">
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label class="form-label">Brand</label>
+            <input asp-for="Brand" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Model</label>
+            <input asp-for="Model" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Year</label>
+            <input asp-for="Year" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Price</label>
+            <input asp-for="Price" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-warning">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </form>
+</div>

@@ -1,0 +1,22 @@
+﻿@model WealthTrack.Models.Investment
+
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h3 class="text-danger">Confirm Delete</h3>
+
+        <p>Are you sure you want to delete this investment?</p>
+
+        <ul class="list-group mb-3">
+            <li class="list-group-item">Ticker: @Model.TickerSymbol</li>
+            <li class="list-group-item">Price: ₹@Model.PurchasePrice</li>
+            <li class="list-group-item">Quantity: @Model.Quantity</li>
+        </ul>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <button class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

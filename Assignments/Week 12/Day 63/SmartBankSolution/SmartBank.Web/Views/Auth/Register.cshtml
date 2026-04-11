@@ -1,0 +1,77 @@
+﻿@model SmartBank.Web.Models.RegisterViewModel
+
+<div class="auth-container">
+
+    <div class="card auth-card p-4">
+
+        <div class="text-center mb-4">
+            <h3 class="fw-bold text-primary">SmartBank</h3>
+            <p class="text-muted">Create your account 🚀</p>
+        </div>
+
+        <form asp-action="Register" method="post" onsubmit="handleRegister(this)">
+
+            <!-- NAME -->
+            <div class="form-floating mb-3">
+                <input asp-for="FullName" class="form-control" placeholder="Full Name" />
+                <label>Full Name</label>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="form-floating mb-3">
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <label>Email</label>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-floating mb-3 position-relative">
+                <input asp-for="Password" type="password" id="regPassword" class="form-control" placeholder="Password" oninput="checkStrength()" />
+                <label>Password</label>
+
+                <span class="toggle-password" onclick="togglePassword('regPassword')">👁</span>
+            </div>
+
+            <!-- STRENGTH BAR -->
+            <div class="mb-3">
+                <div class="progress" style="height:6px;">
+                    <div id="strengthBar" class="progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="form-floating mb-3">
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                <label>Confirm Password</label>
+            </div>
+
+            <!-- ROLE -->
+            <div class="form-floating mb-3">
+                <select asp-for="Role" class="form-control">
+                    <option value="Customer">Customer</option>
+                    <option value="Admin">Admin</option>
+                </select>
+                <label>Role</label>
+            </div>
+
+            <!-- ERROR -->
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger py-2">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-primary w-100" id="registerBtn">
+                Register
+            </button>
+
+        </form>
+
+        <div class="text-center mt-3">
+            <small>Already have an account? <a asp-action="Login">Login</a></small>
+        </div>
+
+    </div>
+
+</div>

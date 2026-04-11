@@ -1,0 +1,119 @@
+﻿@model List<PulseDashboard.Models.Employee>
+@{
+    ViewData["Title"] = "Pulse Dashboard";
+
+}
+<div class="container mt-5">
+    <h2>@ViewData["DepartmentName"]</h2>
+    <div class="alert alert-info">
+        @ViewBag.Annoucement
+    </div>
+    @{
+        bool status = (bool)ViewData["ServerStatus"];
+            @if (status)
+            {
+                <p class="alert alert-success"> Server Status is active</p>
+            }
+            else
+            {
+            <p class="alert alert-danger"> Server Status is inactive</p>
+        
+            }
+    }
+   
+    <h3 class="mt-4"> Employee List</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Employee Name</th>
+                <th>Position</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var emp in Model)
+            {
+                <tr>
+                    <td>@emp.Id</td>
+                    <td>@emp.Name</td>
+                    <td>@emp.Position</td>
+                    <td>@emp.Salary</td>
+                </tr>
+                
+            }
+            
+        </tbody>
+
+    </table>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

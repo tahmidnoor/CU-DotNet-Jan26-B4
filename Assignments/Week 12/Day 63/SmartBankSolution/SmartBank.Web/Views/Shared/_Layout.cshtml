@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SmartBank.Web</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+
+@{
+    var token = Context.Session.GetString("JWToken");
+    var isLoggedIn = !string.IsNullOrEmpty(token);
+
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<!-- 🔥 PREMIUM NAVBAR -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top premium-navbar">
+
+        <div class="container">
+
+            <!-- LOGO -->
+            <a class="navbar-brand fw-bold fs-4 d-flex align-items-center gap-2"
+               asp-controller="Home" asp-action="Index">
+                🏦 <span class="brand-text">SmartBank</span>
+            </a>
+
+            <!-- TOGGLE -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- NAV CONTENT -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+
+                <!-- LEFT -->
+                <ul class="navbar-nav me-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link @(currentController == "Home" ? "active-nav" : "")"
+                           asp-controller="Home" asp-action="Index">
+                            Home
+                        </a>
+                    </li>
+
+                    @if (isLoggedIn)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Accounts" ? "active-nav" : "")"
+                               asp-controller="Accounts" asp-action="Index">
+                                Accounts
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+
+                    <!-- RIGHT -->
+                    <ul class="navbar-nav align-items-center gap-2">
+
+                        @if (isLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Profile" ? "active-nav" : "")"
+                                       asp-controller="Profile" asp-action="Index">
+                                    👤 Profile
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="btn btn-danger btn-sm px-3"
+                                       asp-controller="Auth" asp-action="Logout">
+                                    Logout
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm px-3"
+                                       asp-controller="Auth" asp-action="Login">
+                                    Login
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="btn btn-light btn-sm px-3"
+                                       asp-controller="Auth" asp-action="Register">
+                                    Register
+                                </a>
+                            </li>
+                        }
+
+                        <!-- 🔥 ALWAYS SHOW -->
+                        <li class="nav-item">
+                            <button id="themeToggle"
+                                    class="btn btn-light btn-sm rounded-circle"
+                                    onclick="toggleDarkMode()">
+                                🌙
+                            </button>
+                        </li>
+
+                    </ul>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN -->
+<div class="d-flex flex-column flex-grow-1">
+    <main role="main" class="flex-grow-1 container py-4">
+        @RenderBody()
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-top text-muted py-3 text-center">
+        &copy; 2026 - SmartBank.Web
+    </footer>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 🔥 DARK MODE SCRIPT -->
+<script>
+
+// APPLY SAVED THEME
+document.addEventListener("DOMContentLoaded", () => {
+
+    const theme = localStorage.getItem("theme");
+
+    if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+        setIcon(true);
+    } else {
+        setIcon(false);
+    }
+});
+
+// TOGGLE
+function toggleDarkMode() {
+
+    const isDark = document.body.classList.toggle("dark-mode");
+
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+
+    setIcon(isDark);
+}
+
+// ICON SWITCH
+function setIcon(isDark) {
+    const btn = document.getElementById("themeToggle");
+    if (!btn) return;
+
+    btn.innerText = isDark ? "☀️" : "🌙";
+}
+
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

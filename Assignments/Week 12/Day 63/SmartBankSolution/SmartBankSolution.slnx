@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="APIServices/SmartBank.AccountService/SmartBank.AccountService.csproj" />
+  <Project Path="APIServices/SmartBank.AuthService/SmartBank.AuthService.csproj" />
+  <Project Path="SmartBank.Gateway/SmartBank.Gateway.csproj" Id="aa54a845-d50e-460b-975c-21e907a98ba7" />
+  <Project Path="SmartBank.TransactionService/SmartBank.TransactionService.csproj" Id="94e98a7e-ec9a-4979-9cbc-1b93eb40d6ef" />
+  <Project Path="SmartBank.Web/SmartBank.Web.csproj" Id="e93c91a5-e6ad-4141-a48d-c0cb01b7502b" />
+</Solution>

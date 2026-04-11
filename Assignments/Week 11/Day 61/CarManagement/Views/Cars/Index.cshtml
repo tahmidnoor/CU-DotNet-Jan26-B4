@@ -1,0 +1,42 @@
+﻿@model IEnumerable<CarManagement.Models.Car>
+
+<h2 class="text-center mb-4">🚗 Car Listings</h2>
+
+<div class="mb-3">
+    @if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+    {
+        <a class="btn btn-success" asp-action="Create">+ Add New Car</a>
+    }
+</div>
+
+<table class="table table-striped table-hover shadow">
+    <thead class="table-dark">
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Brand</td>
+                <td>@item.Model</td>
+                <td>@item.Year</td>
+                <td>₹@item.Price</td>
+                <td>
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">View</a>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

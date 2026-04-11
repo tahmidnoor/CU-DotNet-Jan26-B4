@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container mt-4">
+
+    <div class="p-5 bg-light rounded">
+        <h1>Welcome to CompanyPortal</h1>
+        <p>Your partner in innovative technology solutions.</p>
+
+
+        <button class="btn btn-primary" onclick="showToast()">Show Notification</button>
+    </div>
+
+    <div class="row mt-4">
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Consulting</h5>
+                    <p class="card-text">Professional IT consulting services for businesses.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Software Solutions</h5>
+                    <p class="card-text">Enterprise software development for modern companies.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Training</h5>
+                    <p class="card-text">Professional training programs for developers.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+    <div id="welcomeToast" class="toast">
+
+        <div class="toast-header">
+            <strong class="me-auto">CompanyPortal</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+
+        <div class="toast-body">
+            Welcome to our company website!
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        function showToast()
+        {
+            var toastElement = document.getElementById('welcomeToast');
+            var toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        }
+
+    </script>
+
+}

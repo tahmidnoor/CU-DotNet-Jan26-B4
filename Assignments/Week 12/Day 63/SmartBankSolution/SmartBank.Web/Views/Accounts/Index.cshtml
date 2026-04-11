@@ -1,0 +1,263 @@
+﻿@model List<SmartBank.Web.Models.AccountViewModel>
+
+<h2 class="mb-4 fw-semibold">Your Accounts</h2>
+
+<div class="row g-4">
+
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var acc = Model[i];
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card shadow-sm account-card"
+                 onclick="openAccount(@i)"
+                 style="cursor:pointer;">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">Account Number</h6>
+                    <h5 class="fw-bold text-primary">@acc.AccountNumber</h5>
+
+                    <h6 class="text-muted mt-3">Balance</h6>
+                    <h4 class="fw-bold text-success">₹ @acc.Balance</h4>
+
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>
+
+<!-- 🔥 TRANSACTION PANEL -->
+<div id="transactionSection" class="mt-5 d-none">
+
+    <div class="card shadow-lg">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between">
+                <h5 id="selectedAccount"></h5>
+                <button class="btn btn-sm btn-outline-secondary" onclick="closeSection()">Close</button>
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-success"
+                        onclick="openModal('Deposit')">
+                    Deposit
+                </button>
+
+                <button class="btn btn-danger"
+                        onclick="openModal('Withdraw')">
+                    Withdraw
+                </button>
+            </div>
+
+            <hr />
+
+            <div id="transactionList"></div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 🔥 MODAL -->
+<div class="modal fade" id="transactionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 id="modalTitle"></h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="number" id="amount" class="form-control" placeholder="Enter amount" />
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="submitTransaction()">Submit</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        const accounts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+        let selectedAccountId = 0;
+
+        // 🔥 OPEN ACCOUNT
+        function openAccount(index) {
+
+            const acc = accounts[index];
+
+            selectedAccountId = acc.Id;
+
+            document.getElementById("selectedAccount").innerText =
+                acc.AccountNumber + " (₹ " + acc.Balance + ")";
+
+            const container = document.getElementById("transactionList");
+
+            if (!acc.Transactions || acc.Transactions.length === 0) {
+                container.innerHTML = "<p class='text-muted'>No transactions</p>";
+                return;
+            }
+
+            // 🔥 SORT LATEST FIRST
+            const sorted = acc.Transactions.sort(
+                (a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt)
+            );
+
+            const grouped = groupByDate(sorted);
+
+            let html = "";
+
+            for (let date in grouped) {
+
+                html += `
+                    <div class="mb-3">
+                        <div class="fw-semibold text-muted small mb-2">${date}</div>
+                `;
+
+                grouped[date].forEach(t => {
+
+                    const time = formatTime(t.CreatedAt);
+
+                    html += `
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom transaction-row">
+
+                            <div>
+                                <div class="${t.Type === "Deposit" ? "text-success" : "text-danger"} fw-semibold">
+                                    ${t.Type === "Deposit" ? "↓ Received" : "↑ Sent"}
+                                </div>
+                                <div class="text-muted small">${time}</div>
+                            </div>
+
+                            <div class="fw-semibold">
+                                ₹ ${t.Amount}
+                            </div>
+
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            }
+
+            container.innerHTML = html;
+
+            document.getElementById("transactionSection").classList.remove("d-none");
+        }
+
+        // 🔥 GROUP BY DATE (GPay Style Labels)
+        function groupByDate(transactions) {
+
+            const grouped = {};
+
+            transactions.forEach(t => {
+
+                let dateObj = new Date(t.CreatedAt);
+
+                if (isNaN(dateObj)) {
+                    dateObj = new Date(t.CreatedAt.replace(" ", "T"));
+                }
+
+                const today = new Date();
+                const yesterday = new Date();
+                yesterday.setDate(today.getDate() - 1);
+
+                let label;
+
+                if (isSameDate(dateObj, today)) {
+                    label = "Today";
+                }
+                else if (isSameDate(dateObj, yesterday)) {
+                    label = "Yesterday";
+                }
+                else {
+                    label = dateObj.toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                }
+
+                if (!grouped[label]) grouped[label] = [];
+
+                grouped[label].push(t);
+            });
+
+            return grouped;
+        }
+
+        // 🔥 FORMAT TIME
+        function formatTime(raw) {
+
+            let dateObj = new Date(raw);
+
+            if (isNaN(dateObj)) {
+                dateObj = new Date(raw.replace(" ", "T"));
+            }
+
+            return dateObj.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // 🔥 DATE COMPARE
+        function isSameDate(d1, d2) {
+            return d1.toDateString() === d2.toDateString();
+        }
+
+        // 🔥 CLOSE
+        function closeSection() {
+            document.getElementById("transactionSection").classList.add("d-none");
+        }
+
+        // 🔥 MODAL
+        function openModal(type) {
+            document.getElementById("modalTitle").innerText = type;
+            new bootstrap.Modal(document.getElementById('transactionModal')).show();
+        }
+
+        // 🔥 SUBMIT
+        async function submitTransaction() {
+
+            const type = document.getElementById("modalTitle").innerText;
+            const amount = document.getElementById("amount").value;
+
+            if (!amount || amount <= 0) {
+                alert("Enter valid amount");
+                return;
+            }
+
+            const url = type === "Deposit"
+                ? "/Transaction/Deposit"
+                : "/Transaction/Withdraw";
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `accountId=${selectedAccountId}&amount=${amount}`
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                location.reload();
+            } else {
+                alert(result.message);
+            }
+        }
+
+    </script>
+}
