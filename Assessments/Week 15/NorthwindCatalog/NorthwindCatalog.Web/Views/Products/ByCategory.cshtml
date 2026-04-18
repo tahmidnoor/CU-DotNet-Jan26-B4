@@ -1,0 +1,50 @@
+﻿@model IEnumerable<NorthwindCatalog.Services.DTOs.ProductDto>
+
+<style>
+    .product-card {
+        border-radius: 14px;
+        padding: 15px;
+        background: #fff;
+        transition: 0.25s;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+        .product-card:hover {
+            transform: scale(1.03);
+        }
+
+    .price {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+
+    .inventory {
+        color: green;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Products</h2>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="product-card">
+
+                    <h5>@item.ProductName</h5>
+
+                    <p class="price">₹ @item.UnitPrice</p>
+
+                    <p>Stock: @item.UnitsInStock</p>
+
+                    <p class="inventory">
+                        Inventory: ₹ @item.InventoryValue
+                    </p>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>

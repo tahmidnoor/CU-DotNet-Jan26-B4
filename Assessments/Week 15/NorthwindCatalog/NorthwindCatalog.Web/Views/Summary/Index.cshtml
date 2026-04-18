@@ -1,0 +1,42 @@
+﻿@model IEnumerable<NorthwindCatalog.Services.DTOs.CategorySummaryDto>
+
+<style>
+    .summary-table {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+        .summary-table th {
+            background: #212529;
+            color: white;
+        }
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Category Summary</h2>
+
+    <table class="table summary-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Products</th>
+                <th>Avg Price</th>
+                <th>Most Expensive</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CategoryName</td>
+                    <td>@item.ProductCount</td>
+                    <td>₹ @item.AvgPrice</td>
+                    <td>@item.MostExpensiveProduct</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

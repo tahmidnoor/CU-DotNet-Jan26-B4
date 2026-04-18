@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Northwind Catalog</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/NorthwindCatalog.Web.styles.css" asp-append-version="true" />
+
+    <style>
+            body {
+                background-color: #f5f7fa;
+            }
+
+            .navbar-custom {
+                background-color: #212529;
+            }
+
+                .navbar-custom .nav-link,
+                .navbar-custom .navbar-brand {
+                    color: #fff;
+                }
+
+                    .navbar-custom .nav-link:hover {
+                        color: #0d6efd;
+                    }
+
+            .footer {
+                background: #fff;
+                text-align: center;
+                padding: 10px;
+                font-size: 14px;
+            }
+    </style>
+</head>
+
+<body>
+
+    <!-- 🔥 NAVBAR -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-custom shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-controller="Categories" asp-action="Index">
+                    Northwind
+                </a>
+
+                <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Categories" asp-action="Index">
+                                Categories
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Summary" asp-action="Index">
+                                Summary
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 🔹 MAIN CONTENT -->
+    <div class="container mt-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- 🔻 FOOTER -->
+    <footer class="footer border-top mt-4">
+        <div class="container">
+            © 2026 Northwind Catalog
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
