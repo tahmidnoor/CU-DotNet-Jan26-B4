@@ -1,0 +1,324 @@
+@model LoanSphere_Frontend.Models.LoanDetailsViewModel
+@{
+    ViewData["Title"] = "Loan Details";
+    var nextInstallment = Model.CanSeePaymentSchedule ? Model.Loan.NextPendingInstallment : null;
+    var paidInstallments = Model.Loan.PaidInstallments;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="ls-card" style="background:#dcfce7; color:#166534; margin-bottom:16px;">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="ls-card" style="background:#fee2e2; color:#991b1b; margin-bottom:16px;">
+        @TempData["Error"]
+    </div>
+}
+
+<!-- HEADER -->
+<div class="ls-mb-8">
+    <h2>@Model.Loan.LoanType Loan</h2>
+    <p class="ls-text-muted">Loan overview and payment details</p>
+</div>
+
+<!-- SUMMARY -->
+<div class="ls-grid-3 ls-mb-8">
+
+    <div class="ls-stat-card">
+        <div class="ls-stat-label">Loan Amount</div>
+        <div class="ls-stat-value">₹ @Model.Loan.Amount.ToString("N0")</div>
+    </div>
+
+    <div class="ls-stat-card">
+        <div class="ls-stat-label">EMI</div>
+        <div class="ls-stat-value">₹ @Model.Loan.EmiAmount.ToString("N2")</div>
+    </div>
+
+    <div class="ls-stat-card">
+        <div class="ls-stat-label">Outstanding</div>
+        <div class="ls-stat-value">₹ @Model.Loan.OutstandingAmount.ToString("N2")</div>
+    </div>
+
+</div>
+
+<!-- STATUS -->
+<div class="ls-card ls-mb-6">
+    <h3>
+        Status:
+        <span class="ls-status ls-status-@Model.Loan.Status.ToLower()">
+            @Model.Loan.Status
+        </span>
+    </h3>
+
+    <p class="ls-text-muted">@Model.Loan.ReviewSummary</p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Loan.PrimaryReviewReason))
+    {
+        <p><strong>Reason:</strong> @Model.Loan.PrimaryReviewReason</p>
+    }
+</div>
+
+<!-- REVIEWS -->
+<div class="ls-grid-3 ls-mb-8">
+
+    <div class="ls-card">
+        <h4>Admin Review</h4>
+        <p>@Model.Loan.AdminReviewStatus</p>
+        <p class="ls-text-muted">@Model.Loan.AdminReviewReason</p>
+    </div>
+
+    <div class="ls-card">
+        <h4>Manager Review</h4>
+        <p>@Model.Loan.ManagerReviewStatus</p>
+        <p class="ls-text-muted">@Model.Loan.ManagerReviewReason</p>
+    </div>
+
+    <div class="ls-card">
+        <h4>Proof of Loan</h4>
+        <p>@Model.Loan.DocsVerified</p>
+        <p class="ls-text-muted">
+            Applied on @Model.Loan.AppliedAt.ToString("dd MMM yyyy")
+        </p>
+    </div>
+
+</div>
+
+<!-- 🔥 APPLICANT PROFILE (ADMIN / MANAGER ONLY) -->
+<div class="ls-grid-2 ls-mb-8">
+
+    <!-- 🔥 PROFILE CARD -->
+    @if (Model.CanViewProfile && Model.Profile != null)
+    {
+        <div class="ls-card">
+
+            <h3>Applicant Profile</h3>
+
+            <div class="ls-grid-2 ls-mt-4">
+
+                <div>
+                    <div class="ls-stat-label">Full Name</div>
+                    <div class="ls-stat-value">@Model.Profile.FullName</div>
+                </div>
+
+                <div>
+                    <div class="ls-stat-label">Email</div>
+                    <div class="ls-stat-value">@Model.Profile.Email</div>
+                </div>
+
+                <div>
+                    <div class="ls-stat-label">PAN</div>
+                    <div class="ls-stat-value">@Model.Profile.PanCardNumber</div>
+                </div>
+
+                <div>
+                    <div class="ls-stat-label">Aadhaar</div>
+                    <div class="ls-stat-value">@Model.Profile.AadhaarNumber</div>
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+    <!-- 🔥 DOCUMENT CARD -->
+    @if (!string.IsNullOrEmpty(Model.Loan.DocsVerified))
+    {
+        <div class="ls-card">
+
+            <h3><strong>Uploaded Document</strong></h3>
+
+            <iframe src="~/uploads/@Model.Loan.DocsVerified"
+                    width="100%"
+                    height="200px"
+                    style="border:1px solid #ddd;">
+            </iframe>
+
+            <div class="ls-mt-4">
+                <a href="~/uploads/@Model.Loan.DocsVerified"
+                       target="_blank"
+                       class="ls-btn ls-btn-primary">
+                    Open Document
+                </a>
+            </div>
+
+        </div>
+    }
+
+</div>
+<!-- REVIEW ACTION -->
+@if (Model.CanReview)
+{
+    <div class="ls-form-container ls-mb-8">
+
+        <h3>Review Decision</h3>
+
+        <form method="post" asp-action="UpdateDecision" asp-route-id="@Model.Loan.LoanId">
+            @Html.AntiForgeryToken()
+
+            <div class="ls-form-group">
+                <label class="ls-label">Reason</label>
+                <textarea name="reason" class="ls-textarea"></textarea>
+            </div>
+
+            <div class="ls-form-actions">
+                <button class="ls-btn ls-btn-primary" name="status" value="Approved">
+                    Approve
+                </button>
+
+                <button class="ls-btn ls-btn-danger" name="status" value="Rejected">
+                    Reject
+                </button>
+            </div>
+        </form>
+
+    </div>
+}
+else if (Model.Loan.Status != "Approved")
+{
+    <div class="ls-card ls-mb-8">
+        <p class="ls-text-muted">Decision already submitted</p>
+    </div>
+}
+
+@if (Model.CanSeePaymentSchedule)
+{
+    <!-- PAYMENT SUMMARY -->
+    <div class="ls-grid-3 ls-mb-8">
+
+        <div class="ls-card">
+            <h4>Next Payment</h4>
+
+            @if (nextInstallment != null)
+            {
+                <p><strong>@nextInstallment.DueDate.ToString("dd MMM yyyy")</strong></p>
+                <p>₹ @nextInstallment.EmiAmount.ToString("N2")</p>
+            }
+            else
+            {
+                <p class="ls-text-muted">No pending EMI</p>
+            }
+        </div>
+
+        <div class="ls-card">
+            <h4>Progress</h4>
+            <p>@paidInstallments.Count / @Model.Loan.EmiSchedules.Count paid</p>
+            <p class="ls-text-muted">₹ @Model.Loan.TotalPaid.ToString("N2") paid</p>
+        </div>
+
+        <div class="ls-card">
+            <h4>Remaining</h4>
+            <p>₹ @Model.Loan.OutstandingAmount.ToString("N2")</p>
+        </div>
+
+    </div>
+
+    <!-- PAYMENT HISTORY -->
+    <div class="ls-table-container ls-mb-8">
+
+        <div class="ls-table-header">
+            <div class="ls-table-title">Payment History</div>
+        </div>
+
+        @if (!paidInstallments.Any())
+        {
+            <div class="ls-card">
+                <p>No payments yet</p>
+            </div>
+        }
+        else
+        {
+            <div class="ls-table-scroll">
+                <table class="ls-data-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in paidInstallments)
+                        {
+                            <tr>
+                                <td>@item.MonthNumber</td>
+                                <td>@item.PaidAt?.ToString("dd MMM yyyy")</td>
+                                <td>₹ @item.EmiAmount.ToString("N2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <!-- AMORTIZATION -->
+    <div class="ls-table-container">
+
+        <div class="ls-table-header">
+            <div class="ls-table-title">EMI Schedule</div>
+        </div>
+
+        <div class="ls-table-scroll">
+            <table class="ls-data-table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>EMI</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Loan.EmiSchedules.OrderBy(x => x.MonthNumber))
+                    {
+                        <tr>
+                            <td>@item.MonthNumber</td>
+                            <td>₹ @item.EmiAmount.ToString("N2")</td>
+                            <td>₹ @item.PrincipalComponent.ToString("N2")</td>
+                            <td>₹ @item.InterestComponent.ToString("N2")</td>
+                            <td>
+                                <span class="ls-status @(item.IsPaid ? "ls-status-active" : "ls-status-pending")">
+                                    @(item.IsPaid ? "Paid" : "Pending")
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (!item.IsPaid && Model.CurrentUser.Role == "Customer")
+                                {
+                                    <a asp-controller="EMI"
+                                           asp-action="Payments"
+                                           asp-route-emiId="@item.Id"
+                                           asp-route-loanId="@Model.Loan.LoanId"
+                                           class="ls-btn ls-btn-primary ls-btn-sm">
+                                        Pay
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="ls-text-muted">—</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+}
+else
+{
+    <div class="ls-card">
+        <p class="ls-text-muted">
+            Payment schedule will be available after approval.
+        </p>
+    </div>
+}

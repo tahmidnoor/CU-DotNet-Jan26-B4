@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Services/">
+    <Project Path="LoanAuth/LoanAuth/LoanAuth.csproj" />
+    <Project Path="LoanManagement/LoanManagement.csproj" />
+    <Project Path="LoanProfile/LoanProfile.csproj" Id="41867121-bde0-44eb-865b-d83d7cafe8a9" />
+  </Folder>
+  <Folder Name="/UI/">
+    <Project Path="LoanSphere_Frontend/LoanSphere_Frontend.csproj" Id="716111da-5cad-47e4-b7c5-fca255b8862a" />
+  </Folder>
+</Solution>

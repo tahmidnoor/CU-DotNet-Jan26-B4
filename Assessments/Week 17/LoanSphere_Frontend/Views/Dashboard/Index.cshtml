@@ -1,0 +1,305 @@
+@model LoanSphere_Frontend.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var activeBalance = Model.MyLoans
+        .Where(loan => !loan.Status.Equals("Rejected", StringComparison.OrdinalIgnoreCase))
+        .Sum(loan => Math.Max(0, loan.TotalPayable - loan.TotalPaid));
+
+    var activeLoans = Model.MyLoans
+        .Count(loan => !loan.Status.Equals("Rejected", StringComparison.OrdinalIgnoreCase));
+
+    var nextInstallment = Model.MyLoans
+        .Select(loan => new { Loan = loan, Installment = loan.NextPendingInstallment })
+        .Where(item => item.Installment != null)
+        .OrderBy(item => item.Installment!.DueDate)
+        .FirstOrDefault();
+
+    var totalVolume = Model.ManagedLoans.Sum(loan => loan.Amount);
+    var pendingApplications = Model.ManagedLoans.Count(loan => loan.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase));
+    var attentionAmount = Model.ManagedLoans
+        .Where(loan => loan.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+        .Sum(loan => loan.Amount);
+}
+
+@if (!Model.CanManageLoans)
+{
+    <!-- ================= USER DASHBOARD ================= -->
+
+    <div class="ls-mb-8">
+        <h2>Your Lending Portfolio</h2>
+        <p class="ls-text-muted">Track balance, EMI, and loan activity.</p>
+    </div>
+
+    @if (Model.RequiresProfileCompletion)
+    {
+        <div class="ls-card ls-mb-6">
+            <h3>Complete your profile</h3>
+            <p class="ls-text-muted">Add PAN, Aadhaar, and profile image to continue.</p>
+
+            <div class="ls-form-actions">
+                <a class="ls-btn ls-btn-primary" asp-controller="Profile" asp-action="Edit">Complete Profile</a>
+                <a class="ls-btn ls-btn-secondary" asp-controller="LoanUI" asp-action="Apply">Review Loan Form</a>
+            </div>
+        </div>
+    }
+
+    <!-- STATS -->
+    <!-- 🔥 FOCUS + ACTION GRID -->
+    <div class="ls-grid-2 ls-mb-8">
+
+        <!-- EMI CARD -->
+        @if (nextInstallment != null)
+        {
+            <div class="ls-card ls-focus-card">
+
+                <p class="ls-text-muted">Upcoming EMI</p>
+                <h2>₹ @nextInstallment.Installment!.EmiAmount.ToString("N2")</h2>
+
+                <p class="ls-text-muted">
+                    Due on @nextInstallment.Installment.DueDate.ToString("dd MMM yyyy")
+                </p>
+
+                <a asp-controller="EMI"
+                       asp-action="Payments"
+                       asp-route-emiId="@nextInstallment.Installment.Id"
+                       asp-route-loanId="@nextInstallment.Loan.LoanId"
+                       class="ls-btn ls-btn-primary">
+                    Pay Now
+                </a>
+
+            </div>
+        }
+
+        <!-- 🔥 QUICK ACTIONS -->
+        <div class="ls-card">
+
+            <h3>Quick Actions</h3>
+
+            <div class="ls-action-list">
+
+                <a asp-controller="LoanUI"
+                       asp-action="Apply"
+                       class="ls-action-item">
+                    Apply New Loan
+                </a>
+
+                <a asp-controller="Profile"
+                       asp-action="Edit"
+                       class="ls-action-item">
+                    Update Profile
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="ls-grid-3 ls-mb-8">
+
+        <div class="ls-stat-card">
+            <div class="ls-stat-label">Active Balance</div>
+            <div class="ls-stat-value">₹ @activeBalance.ToString("N2")</div>
+            <div class="ls-stat-sub">Across @activeLoans loans</div>
+        </div>
+
+        <div class="ls-stat-card">
+            <div class="ls-stat-label">Next EMI</div>
+
+            @if (nextInstallment != null)
+            {
+                <div class="ls-stat-value">₹ @nextInstallment.Installment!.EmiAmount.ToString("N2")</div>
+                <div class="ls-stat-sub">@nextInstallment.Installment.DueDate.ToString("dd MMM yyyy")</div>
+            }
+            else
+            {
+                <div class="ls-stat-sub">No pending EMI</div>
+            }
+        </div>
+
+        <div class="ls-stat-card">
+            <div class="ls-stat-label">Credit Score</div>
+
+            @if (Model.Profile != null)
+            {
+                <div class="ls-stat-value">@Model.Profile.CibilScore</div>
+            }
+            else
+            {
+                <div class="ls-stat-sub">Not available</div>
+            }
+        </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="ls-table-container">
+
+        <div class="ls-table-header">
+            <div>
+                <div class="ls-table-title">Loan Portfolio</div>
+                <div class="ls-table-sub">All your loan activity</div>
+            </div>
+
+            <a class="ls-btn ls-btn-primary" asp-controller="LoanUI" asp-action="Apply">
+                New Application
+            </a>
+        </div>
+
+        @if (!Model.MyLoans.Any())
+        {
+            <div class="ls-card">
+                <h3>No loans yet</h3>
+                <p class="ls-text-muted">Apply for a loan to get started.</p>
+            </div>
+        }
+        else
+        {
+            <div class="ls-table-scroll">
+                <table class="ls-data-table">
+                    <thead>
+                        <tr>
+                            <th>Loan</th>
+                            <th>Status</th>
+                            <th>Next EMI</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var loan in Model.MyLoans.OrderByDescending(l => l.AppliedAt))
+                        {
+                            <tr>
+                                <td>
+                                    <div class="ls-table-entity">
+                                        <div class="ls-entity-avatar">LN</div>
+                                        <div>
+                                            <div class="ls-entity-name">@loan.LoanType</div>
+                                            <div class="ls-entity-id">#@loan.LoanId</div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="ls-status ls-status-@loan.Status.ToLower()">
+                                        @loan.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @if (loan.NextPendingInstallment != null)
+                                    {
+                                        <span class="ls-amount">
+                                            ₹ @loan.NextPendingInstallment.EmiAmount.ToString("N2")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ls-text-muted">—</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <span class="ls-amount">₹ @loan.Amount.ToString("N0")</span>
+                                </td>
+
+                                <td>
+                                    <a class="ls-btn ls-btn-secondary ls-btn-sm"
+                                           asp-controller="LoanUI"
+                                           asp-action="Details"
+                                           asp-route-id="@loan.LoanId">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <!-- ================= ADMIN / MANAGER DASHBOARD ================= -->
+
+    <div class="ls-mb-8">
+        <h2>Financial Overview</h2>
+        <p class="ls-text-muted">Monitor applications and loan volume.</p>
+    </div>
+
+    <div class="ls-grid-3 ls-mb-8">
+
+        <div class="ls-stat-card">
+            <div class="ls-stat-label">Total Volume</div>
+            <div class="ls-stat-value">₹ @totalVolume.ToString("N0")</div>
+        </div>
+
+        <div class="ls-stat-card">
+            <div class="ls-stat-label">Pending</div>
+            <div class="ls-stat-value">@pendingApplications</div>
+        </div>
+
+        <div class="ls-stat-card">
+            <div class="ls-stat-label">Attention Needed</div>
+            <div class="ls-stat-value">₹ @attentionAmount.ToString("N0")</div>
+        </div>
+
+    </div>
+
+    <div class="ls-table-container">
+
+        <div class="ls-table-header">
+            <div class="ls-table-title">Customer Applications</div>
+        </div>
+
+        @if (!Model.ManagedLoans.Any())
+        {
+            <div class="ls-card">
+                <p>No applications available.</p>
+            </div>
+        }
+        else
+        {
+            <div class="ls-table-scroll">
+                <table class="ls-data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var loan in Model.ManagedLoans.OrderByDescending(l => l.AppliedAt))
+                        {
+                            <tr>
+                                <td>@loan.UserId</td>
+                                <td>₹ @loan.Amount.ToString("N0")</td>
+
+                                <td>
+                                    <span class="ls-status ls-status-@loan.Status.ToLower()">
+                                        @loan.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a class="ls-btn ls-btn-primary ls-btn-sm"
+                                           asp-controller="LoanUI"
+                                           asp-action="Details"
+                                           asp-route-id="@loan.LoanId">
+                                        Review
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}

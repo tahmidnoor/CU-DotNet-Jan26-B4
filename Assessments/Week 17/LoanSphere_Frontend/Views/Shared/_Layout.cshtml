@@ -1,0 +1,147 @@
+@inject LoanSphere_Frontend.Services.CurrentUserService CurrentUserService
+@{
+    var currentUser = CurrentUserService.GetCurrentUser();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+
+    var initials = "LS";
+
+    if (!string.IsNullOrWhiteSpace(currentUser?.FullName))
+    {
+        var parts = currentUser.FullName
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Take(2)
+            .Select(p => char.ToUpperInvariant(p[0]).ToString());
+
+        initials = string.Concat(parts);
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LoanSphere</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="ls-app">
+
+        <!-- 🔥 KEY FIX: conditional layout -->
+        <div class="ls-layout @(currentUser == null ? "public-layout" : "")">
+
+            @if (currentUser != null)
+            {
+                <div class="ls-sidebar">
+
+                    <!-- BRAND -->
+                    <div class="ls-sidebar-brand">
+                        <div class="ls-brand-icon">LS</div>
+                        <div class="ls-brand-name">LoanSphere</div>
+                    </div>
+
+                    <!-- NAV -->
+                    <div class="ls-nav-label">Main</div>
+
+                    <a class="ls-nav-item @(
+                                               currentController == "Dashboard" ||
+                                               (currentController == "LoanUI" && currentAction == "Details")
+                                               ? "active" : ""
+                                           )"
+                           asp-controller="Dashboard" asp-action="Index">
+                        Dashboard
+                    </a>
+
+                    <a class="ls-nav-item @(currentController == "LoanUI" && currentAction == "Apply" ? "active" : "")"
+                           asp-controller="LoanUI" asp-action="Apply">
+                        Apply Loan
+                    </a>
+
+                    <a class="ls-nav-item @(currentController == "Profile" ? "active" : "")"
+                           asp-controller="Profile" asp-action="Edit">
+                        Profile
+                    </a>
+
+                    <!-- BOTTOM SECTION -->
+                    <div style="margin-top:auto; padding-top:20px;">
+
+                        <!-- USER INFO (CLICKABLE) -->
+                        <a asp-controller="Profile" asp-action="Edit" class="ls-sidebar-user">
+                            <div class="ls-user-avatar">@initials</div>
+                            <div>
+                                <div class="ls-user-name">@currentUser.FullName</div>
+                                <div class="ls-user-role">@currentUser.Role</div>
+                            </div>
+                        </a>
+
+                        <!-- LOGOUT -->
+                        <form method="post" asp-controller="Account" asp-action="Logout">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="ls-logout-btn">
+                                Logout
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+            }
+
+            <!-- MAIN -->
+            <div style="flex:1; width:100%;">
+
+                <!-- TOPBAR -->
+                <div class="ls-topbar">
+                    <div class="ls-page-title">@ViewData["Title"]</div>
+
+                    <div class="ls-topbar-right">
+                        @if (currentUser == null)
+                        {
+                            <a class="ls-btn ls-btn-secondary" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="ls-btn ls-btn-primary" asp-controller="Account" asp-action="Register">Register</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Profile" asp-action="Edit" class="ls-user-avatar">
+                                @initials
+                            </a>
+                        }
+                    </div>
+                </div>
+
+                <!-- CONTENT -->
+                <main class="ls-main">
+
+                    @if (TempData["StatusMessage"] is string msg)
+                    {
+                        <div class="ls-card" style="margin-bottom:1rem;color:green;">@msg</div>
+                    }
+
+                    @if (TempData["ErrorMessage"] is string err)
+                    {
+                        <div class="ls-card" style="margin-bottom:1rem;color:red;">@err</div>
+                    }
+
+                    @RenderBody()
+
+                </main>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

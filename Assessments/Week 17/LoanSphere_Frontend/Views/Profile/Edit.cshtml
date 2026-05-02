@@ -1,0 +1,131 @@
+@model LoanSphere_Frontend.Models.ProfileEditViewModel
+@{
+    ViewData["Title"] = "Profile";
+
+    var initials = string.Concat(
+        Model.FullName
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Take(2)
+            .Select(part => char.ToUpperInvariant(part[0]).ToString())
+    );
+
+    if (string.IsNullOrWhiteSpace(initials))
+    {
+        initials = "LS";
+    }
+}
+
+<!-- HEADER -->
+<div class="ls-mb-8">
+    <h2>Profile</h2>
+    <p class="ls-text-muted">Manage your identity and KYC details</p>
+</div>
+
+<!-- PROFILE SUMMARY -->
+<div class="ls-card ls-mb-8">
+
+    <div style="display:flex; align-items:center; gap:16px;">
+
+        <!-- 🔥 PROFILE IMAGE OR INITIALS -->
+        @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+        {
+            <img src="@Model.ProfilePictureUrl" class="ls-avatar-img" />
+        }
+        else
+        {
+            <div class="ls-avatar-pill" style="width:50px; height:50px;">
+                @initials
+            </div>
+        }
+
+        <div>
+            <h3>@Model.FullName</h3>
+            <p class="ls-text-muted">@Model.Role</p>
+        </div>
+
+        <div style="margin-left:auto;">
+            <span class="ls-status @(Model.IsProfileComplete ? "ls-status-active" : "ls-status-pending")">
+                @(Model.IsProfileComplete ? "Complete" : "Incomplete")
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DETAILS -->
+<div class="ls-grid-2 ls-mb-8">
+
+    <div class="ls-card">
+        <h4>Contact Info</h4>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Phone:</strong> @Model.Phone</p>
+    </div>
+
+    <div class="ls-card">
+        <h4>KYC Details</h4>
+        <p><strong>PAN:</strong> @(Model.PanCardNumber ?? "Not provided")</p>
+        <p><strong>Aadhaar:</strong> @(Model.AadhaarNumber ?? "Not provided")</p>
+        <p><strong>CIBIL:</strong> @Model.CibilScore</p>
+    </div>
+
+</div>
+
+<!-- EDIT FORM -->
+<div class="ls-form-container">
+
+    <h3 class="ls-mb-4">Edit Profile</h3>
+
+    <!-- 🔥 IMPORTANT: enctype added -->
+    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="ls-form-error"></div>
+
+        <!-- 🔥 FILE UPLOAD -->
+        <div class="ls-form-group">
+            <label class="ls-label">Upload Profile Picture</label>
+            <input type="file" name="ProfileImage" class="ls-input" accept="image/*" />
+        </div>
+
+        <!-- PAN + Aadhaar -->
+        <div class="ls-grid-2">
+
+            <div class="ls-form-group">
+                <label asp-for="PanCardNumber" class="ls-label"></label>
+                <input asp-for="PanCardNumber" class="ls-input" placeholder="Enter PAN" />
+                <span asp-validation-for="PanCardNumber" class="ls-form-error"></span>
+            </div>
+
+            <div class="ls-form-group">
+                <label asp-for="AadhaarNumber" class="ls-label"></label>
+                <input asp-for="AadhaarNumber" class="ls-input" placeholder="Enter Aadhaar" />
+                <span asp-validation-for="AadhaarNumber" class="ls-form-error"></span>
+            </div>
+
+        </div>
+
+        <!-- ACTION -->
+        <div class="ls-form-actions">
+
+            <button type="submit" class="ls-btn ls-btn-primary">
+                Save Profile
+            </button>
+
+        </div>
+
+    </form>
+
+    <!-- 🔥 Separate form (fix nested form bug) -->
+    <form method="post" asp-action="Skip" style="margin-top:10px;">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="ls-btn ls-btn-secondary">
+            Do it later
+        </button>
+    </form>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

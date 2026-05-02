@@ -1,0 +1,60 @@
+@model LoanSphere_Frontend.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Log In";
+}
+
+<div class="ls-form-container" style="max-width:480px; margin:auto; margin-top:3rem;">
+
+    <p class="ls-text-muted">LoanSphere Sign In</p>
+    <h2 class="ls-mb-4">Welcome Back</h2>
+    <p class="ls-text-muted ls-mb-6">
+        Use your registered email and access key to continue.
+    </p>
+
+    <form method="post" asp-controller="Account" asp-action="Login">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="ls-form-error"></div>
+
+        <!-- Email -->
+        <div class="ls-form-group">
+            <label asp-for="Email" class="ls-label"></label>
+            <input asp-for="Email" class="ls-input" placeholder="name@loansphere.com" />
+            <span asp-validation-for="Email" class="ls-form-error"></span>
+        </div>
+
+        <!-- Password -->
+        <div class="ls-form-group">
+            <label asp-for="Password" class="ls-label"></label>
+            <input asp-for="Password" type="password" class="ls-input" placeholder="Enter your access key" />
+            <span asp-validation-for="Password" class="ls-form-error"></span>
+        </div>
+
+        <!-- Remember -->
+        <div class="ls-form-group" style="flex-direction:row; align-items:center;">
+            <input type="checkbox" style="margin-right:8px;" />
+            <span class="ls-text-muted">Trust this device for 30 days</span>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="ls-btn ls-btn-primary ls-btn-lg full-width">
+            Login to Dashboard
+        </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="ls-divider"></div>
+
+    <!-- Register -->
+    <div style="text-align:center;">
+        <p class="ls-text-muted">New to the LoanSphere?</p>
+        <a class="ls-btn ls-btn-secondary" asp-action="Register">
+            Register Account
+        </a>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,158 @@
+@model LoanSphere_Frontend.Models.LoanApplicationViewModel
+@{
+    ViewData["Title"] = "Apply for Loan";
+}
+
+<div class="ls-mb-8">
+    <h2>Loan Application</h2>
+    <p class="ls-text-muted">
+        Fill in your loan details and submit for approval.
+    </p>
+</div>
+
+<div class="ls-grid-2">
+
+    <!-- LEFT: STEPS -->
+    <div class="ls-card">
+
+        <h4 class="ls-mb-4">Application Flow</h4>
+
+        <div class="ls-mb-4">
+            <strong>Step 1:</strong> Identity Verified
+        </div>
+
+        <div class="ls-mb-4">
+            <strong>Step 2:</strong> Loan Details
+        </div>
+
+        <div class="ls-mb-4">
+            <strong>Step 3:</strong> Approval Process
+        </div>
+
+        <div class="ls-divider"></div>
+
+        <p class="ls-text-muted">
+            Your profile is already verified. Submit your application to start the approval process.
+        </p>
+
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="ls-form-container">
+
+        <!-- 🔥 IMPORTANT: enctype added -->
+        <form method="post" asp-action="Apply" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="ls-form-error"></div>
+
+            <!-- Amount + Term -->
+            <div class="ls-grid-2">
+
+                <div class="ls-form-group">
+                    <label asp-for="Amount" class="ls-label"></label>
+                    <input asp-for="Amount" class="ls-input" placeholder="500000" />
+                    <span asp-validation-for="Amount" class="ls-form-error"></span>
+                </div>
+
+                <div class="ls-form-group">
+                    <label asp-for="TermInMonths" class="ls-label"></label>
+
+                    <div class="ls-select-wrap">
+                        <select asp-for="TermInMonths" class="ls-select">
+                            <option value="">Select term</option>
+                            <option value="12">12 months</option>
+                            <option value="24">24 months</option>
+                            <option value="36">36 months</option>
+                            <option value="60">60 months</option>
+                            <option value="84">84 months</option>
+                            <option value="120">120 months</option>
+                        </select>
+                    </div>
+
+                    <span asp-validation-for="TermInMonths" class="ls-form-error"></span>
+                </div>
+
+            </div>
+
+            <!-- Loan Type -->
+            <div class="ls-form-group">
+                <label class="ls-label">Loan Type</label>
+
+                <div class="ls-grid-2">
+
+                    <label>
+                        <input asp-for="LoanType" type="radio" value="House" /> House
+                    </label>
+
+                    <label>
+                        <input asp-for="LoanType" type="radio" value="Education" /> Education
+                    </label>
+
+                    <label>
+                        <input asp-for="LoanType" type="radio" value="Personal" /> Personal
+                    </label>
+
+                    <label>
+                        <input asp-for="LoanType" type="radio" value="Business" /> Business
+                    </label>
+
+                </div>
+
+                <span asp-validation-for="LoanType" class="ls-form-error"></span>
+            </div>
+
+            <!-- Purpose -->
+            <div class="ls-form-group">
+                <label asp-for="Purpose" class="ls-label"></label>
+                <textarea asp-for="Purpose" class="ls-textarea"
+                          placeholder="Describe the purpose of this loan"></textarea>
+                <span asp-validation-for="Purpose" class="ls-form-error"></span>
+            </div>
+
+            <!-- 🔥 NEW: DOCUMENT UPLOAD -->
+            <div class="ls-form-group">
+                <label class="ls-label">Upload Supporting Document (PDF)</label>
+                <input type="file"
+                       name="document"
+                       accept="application/pdf"
+                       class="ls-input" />
+
+                <small class="ls-text-muted">
+                    Upload a PDF (max 5MB). This will be used for verification.
+                </small>
+            </div>
+
+            <!-- INFO -->
+            <div class="ls-card ls-mb-6">
+                <h4>Verification Info</h4>
+                <p class="ls-text-muted">
+                    Your profile (PAN, Aadhaar) is already verified.
+                    After submission, your loan will appear in dashboard with pending status.
+                </p>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="ls-form-actions">
+
+                <button type="submit" class="ls-btn ls-btn-primary">
+                    Submit Application
+                </button>
+
+                <a class="ls-btn ls-btn-secondary"
+                       asp-controller="Dashboard"
+                       asp-action="Index">
+                    Back
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
